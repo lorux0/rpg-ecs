@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp6.0</TargetFramework>
+        <RootNamespace>Lorux0r.Core.Tests</RootNamespace>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Arch.AOT.SourceGenerator" Version="1.0.0" />
+        <PackageReference Include="Arch.EventBus" Version="1.0.2" />
+        <PackageReference Include="Arch.LowLevel" Version="1.0.8" />
+        <PackageReference Include="Arch.Persistence" Version="1.0.2" />
+        <PackageReference Include="Arch.Relationships" Version="1.0.1" />
+        <PackageReference Include="Arch.System" Version="1.0.2" />
+        <PackageReference Include="Arch.System.SourceGenerator" Version="1.1.2" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+        <PackageReference Include="NSubstitute" Version="5.1.0" />
+        <PackageReference Include="NUnit" Version="3.13.2" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
+        <PackageReference Include="coverlet.collector" Version="3.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\rpg-ecs-core\rpg-ecs-core.csproj" />
+    </ItemGroup>
+
+</Project>

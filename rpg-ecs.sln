@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rpg-ecs-console", "rpg-ecs-console\rpg-ecs-console.csproj", "{18D87CF4-90C6-4677-AA01-882D28C9E9D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rpg-ecs-core", "rpg-ecs-core\rpg-ecs-core.csproj", "{6DA62A56-5E4F-4999-9087-A4C274AFF6AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rpg-ecs-core-tests", "rpg-ecs-core-tests\rpg-ecs-core-tests.csproj", "{1D4C2CA3-4B1C-489F-A21B-88958B46978D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18D87CF4-90C6-4677-AA01-882D28C9E9D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18D87CF4-90C6-4677-AA01-882D28C9E9D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18D87CF4-90C6-4677-AA01-882D28C9E9D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18D87CF4-90C6-4677-AA01-882D28C9E9D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DA62A56-5E4F-4999-9087-A4C274AFF6AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DA62A56-5E4F-4999-9087-A4C274AFF6AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DA62A56-5E4F-4999-9087-A4C274AFF6AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DA62A56-5E4F-4999-9087-A4C274AFF6AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D4C2CA3-4B1C-489F-A21B-88958B46978D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D4C2CA3-4B1C-489F-A21B-88958B46978D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D4C2CA3-4B1C-489F-A21B-88958B46978D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D4C2CA3-4B1C-489F-A21B-88958B46978D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
