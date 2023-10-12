@@ -20,6 +20,7 @@ public partial class RangedAttackSystem
     public void Apply(in Entity entity, ref RangedAttack attack)
     {
         var attackerEntity = attack.Attacker.Entity;
+        // TODO: is there any better way of connecting components and entities?
         var attackerPosition = attackerEntity.Get<Position>().Current;
         var targetPosition = attack.Target.Entity.Get<Position>().Current;
             

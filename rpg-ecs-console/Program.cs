@@ -13,6 +13,7 @@ world.Create(new Health(50, 50), new ECSProfile(Guid.NewGuid().ToString(), "Wiza
 world.Create(new Health(70, 70), new ECSProfile(Guid.NewGuid().ToString(), "Hunter"), new Position(new Vector3(1, 0, 0)));
 world.Create(new Health(100, 100), new ECSProfile(Guid.NewGuid().ToString(), "Warrior"), new Position(new Vector3(2, 0, 0)));
 
+// TODO: how to group all systems that do not require any custom parameter?
 var timedSystems = new Group<Time>(
     new DamageOverTimeSystem(world)
 );
@@ -29,6 +30,7 @@ timedSystems.Initialize();
 
 while (await timer.WaitForNextTickAsync() && !cancellationToken.IsCancellationRequested)
 {
+    // TODO: time calculation was in a system in the first place, but since its a single instance in ecs, like a singleton, how to ease access?
     var now = DateTime.UtcNow;
     var elapsed = time.Elapsed;
     var delta = (now - lastUpdatedTimestamp) * time.Scale;

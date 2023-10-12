@@ -19,7 +19,7 @@ public partial class DamageSystem
     public void Tick(in Entity entity, ref Damage damage)
     {
         var targetEntity = damage.Target.Entity;
-        // TODO: is there a better way of connecting components?
+        // TODO: is there any better way of connecting components and entities?
         var health = targetEntity.Get<Health>();
         
         if (!health.IsDead)
