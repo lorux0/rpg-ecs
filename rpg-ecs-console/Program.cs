@@ -24,7 +24,7 @@ var cancellationToken = new CancellationTokenSource();
 var lastUpdatedTimestamp = DateTime.UtcNow;
 var time = new Time(TimeSpan.Zero, TimeSpan.Zero, 1);
 
-var damageDisplayUi = new ProfileDisplayController(new ConsoleProfileDisplayView(), new ECSProfileAntiCorruptionLayer());
+var damageDisplayUi = new ProfileDisplayController(new ConsoleProfileDisplayView(), new ECSProfileAntiCorruptionLayer(world));
 
 timedSystems.Initialize();
 

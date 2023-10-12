@@ -1,35 +1,40 @@
-using Lorux0r.RPG.Core.ECS;
-
 namespace Lorux0r.RPG.Core;
 
 public class ProfileDisplayController
 {
     private readonly IProfileDisplayView view;
-    private readonly IProfileBridge profileBridge;
+    private readonly IProfileGateway profileGateway;
 
     public ProfileDisplayController(IProfileDisplayView view,
-        IProfileBridge profileBridge)
+        IProfileGateway profileGateway)
     {
         this.view = view;
-        this.profileBridge = profileBridge;
-        
-        profileBridge.OnProfileUpdated += ShowProfile; 
+        this.profileGateway = profileGateway;
+
+        profileGateway.OnProfileUpdated += ShowProfile;
         view.ChangeNameRequested += RequestNameChange;
     }
 
     public void Dispose()
     {
         view.ChangeNameRequested -= RequestNameChange;
-        profileBridge.OnProfileUpdated -= ShowProfile;
+        profileGateway.OnProfileUpdated -= ShowProfile;
     }
 
     private void RequestNameChange(string profileId, string name)
     {
-        // world.Create(new ProfileChangeRequest(profileId, name));
+        async Task RequestNameChangeAsync(string profileId, string name, CancellationToken cancellationToken)
+        {
+            var profile = await profileGateway.GetProfile(profileId, cancellationToken);
+            
+            if (profile != null)
+                await profileGateway.UpdateProfile(profile with {Name = name}, cancellationToken);
+        }
+
+        // TODO: make proper cancellation token handling
+        RequestNameChangeAsync(profileId, name, default);
     }
 
-    private void ShowProfile(Profile profile)
-    {
+    private void ShowProfile(Profile profile) =>
         view.Show(profile.Id, profile.Name, profile.CurrentHealth, profile.MaxHealth);
-    }
 }
