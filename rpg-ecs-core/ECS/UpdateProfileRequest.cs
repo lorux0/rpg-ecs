@@ -1,13 +1,15 @@
+using Arch.Core;
+
 namespace Lorux0r.RPG.Core.ECS;
 
 public struct UpdateProfileRequest
 {
-    public string Id { get; }
+    public EntityReference Profile { get; }
     public string Name { get; }
 
-    public UpdateProfileRequest(string id, string name)
+    public UpdateProfileRequest(EntityReference profile, string name)
     {
-        Id = id;
+        Profile = profile;
         Name = name;
     }
 }

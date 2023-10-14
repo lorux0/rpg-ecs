@@ -29,11 +29,13 @@ public class ECSProfileAntiCorruptionLayer : IProfileGateway
         return Task.FromResult(result);
     }
 
-    public Task UpdateProfile(UIProfile profile, CancellationToken cancellationToken)
+    public async Task UpdateProfile(UIProfile profile, CancellationToken cancellationToken)
     {
         // TODO: we need to ensure that ecs processed this request before completing the task. Figure out how can we cancel the operation
-        world.Create(new UpdateProfileRequest(profile.Id, profile.Name));
-        return Task.CompletedTask;
+        var queryResult = new GetProfileEntityByIdQuery(profile.Id, world);
+        world.InlineEntityQuery<GetProfileEntityByIdQuery, Profile>(in new QueryDescription().WithAll<Profile>(), ref queryResult);
+        if (!queryResult.Success) return; 
+        world.Create(new UpdateProfileRequest(queryResult.Result, profile.Name));
     }
 
     public void BroadcastProfileChanges(Profile profile, Health health, Position position) =>

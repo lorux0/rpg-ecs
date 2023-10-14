@@ -54,7 +54,7 @@ public class ProfileDisplayControllerTests
     {
         const string EXPECTED_NAME = "Gandalf";
 
-        world.Create(new Health(20, 50),
+        var wizard = world.Create(new Health(20, 50),
             new ECSProfile("wiz", "Wizard"),
             new Position(new Vector3(1, 5, 7)));
         world.Create(new Health(30, 70),
@@ -65,15 +65,6 @@ public class ProfileDisplayControllerTests
 
         system.Update();
 
-        // Get the profile ECS state
-        ECSProfile updatedProfile;
-        world.Query(in new QueryDescription().WithAll<ECSProfile>(), (in Entity entity, ref ECSProfile profile) =>
-        {
-            // TODO: is there any way of adding the id filter into the query?
-            if (profile.Id == "wiz")
-                updatedProfile = profile;
-        });
-
-        Assert.AreEqual(EXPECTED_NAME, updatedProfile.Name);
+        Assert.AreEqual(EXPECTED_NAME, world.Get<ECSProfile>(wizard).Name);
     }
 }

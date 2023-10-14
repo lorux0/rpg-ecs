@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Arch.Core;
 using Arch.System;
 
@@ -24,7 +23,6 @@ public partial class UpdateProfileToUISystem : ISimpleSystem
 
     [Query]
     [All(typeof(Profile), typeof(Health))]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void BroadcastToUI(in Entity entity, ref Profile profile, ref Health health, ref Position position)
     {
         // TODO: how we can check that components (profile & health) have just changed so we can avoid broadcasting on every query?
@@ -36,19 +34,11 @@ public partial class UpdateProfileToUISystem : ISimpleSystem
     [Query]
     [All(typeof(UpdateProfileRequest))]
     [None(typeof(DestroyEntitySchedule))]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void UpdateProfileFromUI(in Entity entity, ref UpdateProfileRequest request)
     {
-        var requestId = request.Id;
-        var requestName = request.Name;
-
-        // TODO: can we improve this instead of making a manual query here?
-        world.Query(in new QueryDescription().WithAll<Profile>(), (in Entity _, ref Profile profile) =>
-        {
-            if (profile.Id != requestId) return;
-            profile.Name = requestName;
-        });
-
+        var profile = world.Get<Profile>(request.Profile);
+        profile.Name = request.Name;
+        world.Set(request.Profile, profile);
         entity.FlagToDestroy(world);
     }
 }

@@ -7,7 +7,7 @@ using Lorux0r.RPG.Core;
 using Lorux0r.RPG.Core.ECS;
 using ECSProfile = Lorux0r.RPG.Core.ECS.Profile;
 
-const int TICK_HZ = 30;
+const int TICK_HZ = 1;
 
 var world = World.Create();
 world.Create(new Time(TimeSpan.Zero, TimeSpan.Zero, 1));
