@@ -4,7 +4,7 @@ using Arch.System;
 
 namespace Lorux0r.RPG.Core.ECS;
 
-public partial class DamageSystem
+public partial class DamageSystem : ISimpleSystem
 {
     private readonly World world;
 
@@ -12,16 +12,21 @@ public partial class DamageSystem
     {
         this.world = world;
     }
-    
+
+    public void Update()
+    {
+        ApplyQuery(world);
+    }
+
     [Query]
     [Any(typeof(Damage))]
     [None(typeof(DestroyEntitySchedule))]
-    public void Tick(in Entity entity, ref Damage damage)
+    private void Apply(in Entity entity, ref Damage damage)
     {
         var targetEntity = damage.Target.Entity;
         // TODO: is there any better way of connecting components and entities?
         var health = targetEntity.Get<Health>();
-        
+
         if (!health.IsDead)
         {
             var newHealth = Math.Max(0, health.Current - damage.Value);

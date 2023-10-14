@@ -30,8 +30,8 @@ public class DestroyEntitiesSystemTests
         world.Create(new DestroyEntitySchedule());
         world.Create(new DestroyEntitySchedule());
         world.Create(new DestroyEntitySchedule());
-        
-        system.Tick();
+
+        system.Update();
 
         var entities = new List<Entity>();
         world.GetEntities(in new QueryDescription().WithAll<DestroyEntitySchedule>(), entities);

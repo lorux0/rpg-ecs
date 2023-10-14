@@ -2,7 +2,7 @@ using Arch.Core;
 
 namespace Lorux0r.RPG.Core.ECS;
 
-public class DestroyEntitiesSystem
+public class DestroyEntitiesSystem : ISimpleSystem
 {
     private readonly World world;
     private readonly QueryDescription query = new QueryDescription().WithAll<DestroyEntitySchedule>();
@@ -12,7 +12,7 @@ public class DestroyEntitiesSystem
         this.world = world;
     }
 
-    public void Tick()
+    public void Update()
     {
         world.Destroy(in query);
     }

@@ -36,16 +36,15 @@ public class ProfileDisplayControllerTests
     [Test]
     public void ApplyChangesFromECSToUI()
     {
-        var wizard = world.Create(new Health(20, 50),
+        world.Create(new Health(20, 50),
             new ECSProfile("wiz", "Wizard"),
             new Position(new Vector3(1, 5, 7)));
-        var hunter = world.Create(new Health(30, 70),
+        world.Create(new Health(30, 70),
             new ECSProfile("hunt", "Hunter"),
             new Position(new Vector3(8, 3, 5)));
 
-        system.BroadcastToUI(wizard, ref world.Get<ECSProfile>(wizard), ref world.Get<Health>(wizard), ref world.Get<Position>(wizard));
-        system.BroadcastToUI(hunter, ref world.Get<ECSProfile>(hunter), ref world.Get<Health>(hunter), ref world.Get<Position>(hunter));
-        
+        system.Update();
+
         view.Received(1).Show("wiz", "Wizard", 20, 50);
         view.Received(1).Show("hunt", "Hunter", 30, 70);
     }
@@ -54,24 +53,17 @@ public class ProfileDisplayControllerTests
     public void ApplyChangesFromUIToECS()
     {
         const string EXPECTED_NAME = "Gandalf";
-        
-        var wizard = world.Create(new Health(20, 50),
+
+        world.Create(new Health(20, 50),
             new ECSProfile("wiz", "Wizard"),
             new Position(new Vector3(1, 5, 7)));
-        var hunter = world.Create(new Health(30, 70),
+        world.Create(new Health(30, 70),
             new ECSProfile("hunt", "Hunter"),
             new Position(new Vector3(8, 3, 5)));
 
         view.ChangeNameRequested += Raise.Event<Action<string, string>>("wiz", EXPECTED_NAME);
 
-        // ECSProfileAntiCorruptionLayer creates an entity with UpdateProfileRequest component
-        // So we need to query the world and then update the system with it so the request is processed
-        // Probably there is a better way of doing it
-        world.Query(in new QueryDescription().WithAll<UpdateProfileRequest>(),
-            (in Entity entity, ref UpdateProfileRequest request) =>
-            {
-                system.UpdateProfileFromUI(entity, ref request);
-            });
+        system.Update();
 
         // Get the profile ECS state
         ECSProfile updatedProfile;
@@ -81,7 +73,7 @@ public class ProfileDisplayControllerTests
             if (profile.Id == "wiz")
                 updatedProfile = profile;
         });
-        
+
         Assert.AreEqual(EXPECTED_NAME, updatedProfile.Name);
     }
 }

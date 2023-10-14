@@ -17,13 +17,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Arch.AOT.SourceGenerator" Version="1.0.0" />
-        <PackageReference Include="Arch.EventBus" Version="1.0.2" />
-        <PackageReference Include="Arch.LowLevel" Version="1.0.8" />
-        <PackageReference Include="Arch.Persistence" Version="1.0.2" />
-        <PackageReference Include="Arch.Relationships" Version="1.0.1" />
-        <PackageReference Include="Arch.System" Version="1.0.2" />
-        <PackageReference Include="Arch.System.SourceGenerator" Version="1.1.2" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
         <PackageReference Include="NSubstitute" Version="5.1.0" />
         <PackageReference Include="NUnit" Version="3.13.2" />

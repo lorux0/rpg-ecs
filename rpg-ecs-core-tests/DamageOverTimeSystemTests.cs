@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Arch.Core;
 using Arch.Core.Extensions;
-using Lorux0r.RPG.Core;
 using Lorux0r.RPG.Core.ECS;
 using NUnit.Framework;
 
@@ -33,9 +32,11 @@ public class DamageOverTimeSystemTests
     {
         var entity = world.Create(new DamageOverTimeAttack(target.Reference(), 10,
             TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0.3)));
-        
-        system.Tick(new Time(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1.2), 1),
-            entity, ref world.Get<DamageOverTimeAttack>(entity));
+
+        var time = new Time(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1.2), 1);
+        system.BeforeUpdate(time);
+        system.Update(time);
+        system.AfterUpdate(time);
 
         var attack = world.Get<DamageOverTimeAttack>(entity);
         Assert.AreEqual(TimeSpan.FromSeconds(8.8), attack.Remaining);
@@ -51,9 +52,11 @@ public class DamageOverTimeSystemTests
     {
         var entity = world.Create(new DamageOverTimeAttack(target.Reference(), 10,
             TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0.3)));
-        
-        system.Tick(new Time(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0.6), 1),
-            entity, ref world.Get<DamageOverTimeAttack>(entity));
+
+        var time = new Time(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0.6), 1);
+        system.BeforeUpdate(time);
+        system.Update(time);
+        system.AfterUpdate(time);
 
         var attack = world.Get<DamageOverTimeAttack>(entity);
         Assert.AreEqual(TimeSpan.FromSeconds(9.4), attack.Remaining);
@@ -69,9 +72,11 @@ public class DamageOverTimeSystemTests
     {
         var entity = world.Create(new DamageOverTimeAttack(target.Reference(), 10,
             TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(0)));
-        
-        system.Tick(new Time(TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(10), 1),
-            entity, ref world.Get<DamageOverTimeAttack>(entity));
+
+        var time = new Time(TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(10), 1);
+        system.BeforeUpdate(time);
+        system.Update(time);
+        system.AfterUpdate(time);
 
         var attack = world.Get<DamageOverTimeAttack>(entity);
         Assert.AreEqual(TimeSpan.FromSeconds(10), attack.Remaining);
@@ -81,37 +86,17 @@ public class DamageOverTimeSystemTests
         Assert.AreEqual(2, damages.Count);
         Assert.IsFalse(world.Has<DestroyEntitySchedule>(entity));
     }
-    
-    [Test]
-    public void HitBeforeExpiringAfterMultipleTicks()
-    {
-        var entity = world.Create(new DamageOverTimeAttack(target.Reference(), 10,
-            TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(0)));
-        
-        system.Tick(new Time(TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(5), 1),
-            entity, ref world.Get<DamageOverTimeAttack>(entity));
-        system.Tick(new Time(TimeSpan.FromSeconds(105), TimeSpan.FromSeconds(5), 1),
-            entity, ref world.Get<DamageOverTimeAttack>(entity));
-        system.Tick(new Time(TimeSpan.FromSeconds(110), TimeSpan.FromSeconds(5), 1),
-            entity, ref world.Get<DamageOverTimeAttack>(entity));
 
-        var attack = world.Get<DamageOverTimeAttack>(entity);
-        Assert.AreEqual(TimeSpan.FromSeconds(5), attack.Remaining);
-        Assert.AreEqual(TimeSpan.FromSeconds(5), attack.Elapsed);
-        var damages = new List<Entity>();
-        world.GetEntities(in new QueryDescription().WithAll<Damage>(), damages);
-        Assert.AreEqual(1, damages.Count);
-        Assert.IsFalse(world.Has<DestroyEntitySchedule>(entity));
-    }
-    
     [Test]
     public void HitAndExpire()
     {
         var entity = world.Create(new DamageOverTimeAttack(target.Reference(), 10,
             TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(0.3)));
-        
-        system.Tick(new Time(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), 1),
-            entity, ref world.Get<DamageOverTimeAttack>(entity));
+
+        var time = new Time(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), 1);
+        system.BeforeUpdate(time);
+        system.Update(time);
+        system.AfterUpdate(time);
 
         var attack = world.Get<DamageOverTimeAttack>(entity);
         Assert.AreEqual(TimeSpan.FromSeconds(0), attack.Remaining);

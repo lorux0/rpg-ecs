@@ -36,7 +36,7 @@ public class RangedAttackTests
     {
         var entity = world.Create(new RangedAttack(attacker.Reference(), target.Reference(), 10, 1));
 
-        system.Apply(in entity, ref world.Get<RangedAttack>(entity));
+        system.Update();
 
         var damages = new List<Entity>();
         world.GetEntities(in new QueryDescription().WithAll<Damage>(), damages);
@@ -53,9 +53,8 @@ public class RangedAttackTests
             world.Create(new RangedAttack(attacker.Reference(), target.Reference(), 5, 1)),
             world.Create(new RangedAttack(attacker.Reference(), target.Reference(), 30, 1))
         };
-
-        foreach (var entity in entities)
-            system.Apply(entity, ref world.Get<RangedAttack>(entity));
+        
+        system.Update();
 
         var damages = new List<Entity>();
         world.GetEntities(in new QueryDescription().WithAll<Damage>(), damages);
@@ -70,7 +69,7 @@ public class RangedAttackTests
         world.Set(attacker, new Position(new Vector3(0, 3, 3)));
         var entity = world.Create(new RangedAttack(attacker.Reference(), target.Reference(), 10, 1));
 
-        system.Apply(in entity, ref world.Get<RangedAttack>(entity));
+        system.Update();
 
         var damages = new List<Entity>();
         world.GetEntities(in new QueryDescription().WithAll<Damage>(), damages);
@@ -83,7 +82,7 @@ public class RangedAttackTests
     {
         world.Set(target, new Position(new Vector3(1, 4, 2)));
         world.Set(attacker, new Position(new Vector3(0, 3, 3)));
-        
+
         var entities = new[]
         {
             world.Create(new RangedAttack(attacker.Reference(), target.Reference(), 10, 1)),
@@ -91,9 +90,8 @@ public class RangedAttackTests
             world.Create(new RangedAttack(attacker.Reference(), target.Reference(), 10, 2)),
             world.Create(new RangedAttack(attacker.Reference(), target.Reference(), 10, 3))
         };
-
-        foreach (var entity in entities)
-            system.Apply(in entity, ref world.Get<RangedAttack>(entity));
+        
+        system.Update();
 
         var damages = new List<Entity>();
         world.GetEntities(in new QueryDescription().WithAll<Damage>(), damages);

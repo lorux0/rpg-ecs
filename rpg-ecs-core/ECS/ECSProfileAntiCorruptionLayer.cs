@@ -6,7 +6,7 @@ namespace Lorux0r.RPG.Core.ECS;
 public class ECSProfileAntiCorruptionLayer : IProfileGateway
 {
     private readonly World world;
-    
+
     public event Action<UIProfile>? OnProfileUpdated;
 
     public ECSProfileAntiCorruptionLayer(World world)
@@ -14,10 +14,10 @@ public class ECSProfileAntiCorruptionLayer : IProfileGateway
         this.world = world;
     }
 
-    public async Task<UIProfile?> GetProfile(string profileId, CancellationToken cancellationToken)
+    public Task<UIProfile?> GetProfile(string profileId, CancellationToken cancellationToken)
     {
         UIProfile? result = null;
-        
+
         world.Query(in new QueryDescription().WithAll<Profile, Health, Position>(),
             (in Entity entity, ref Profile profile, ref Health health, ref Position position) =>
             {
@@ -26,13 +26,14 @@ public class ECSProfileAntiCorruptionLayer : IProfileGateway
                 result = ToUIProfile(profile, health, position);
             });
 
-        return result;
+        return Task.FromResult(result);
     }
 
-    public async Task UpdateProfile(UIProfile profile, CancellationToken cancellationToken)
+    public Task UpdateProfile(UIProfile profile, CancellationToken cancellationToken)
     {
         // TODO: we need to ensure that ecs processed this request before completing the task. Figure out how can we cancel the operation
         world.Create(new UpdateProfileRequest(profile.Id, profile.Name));
+        return Task.CompletedTask;
     }
 
     public void BroadcastProfileChanges(Profile profile, Health health, Position position) =>

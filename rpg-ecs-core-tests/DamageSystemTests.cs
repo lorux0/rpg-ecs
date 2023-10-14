@@ -1,7 +1,6 @@
 using System.Linq;
 using Arch.Core;
 using Arch.Core.Extensions;
-using Lorux0r.RPG.Core;
 using Lorux0r.RPG.Core.ECS;
 using NUnit.Framework;
 
@@ -26,13 +25,13 @@ public class DamageSystemTests
     {
         World.Destroy(world);
     }
-    
+
     [Test]
     public void HitOnce()
     {
         var entity = world.Create(new Damage(target.Reference(), 10));
 
-        system.Tick(in entity, ref world.Get<Damage>(entity));
+        system.Update();
 
         var health = world.Get<Health>(target);
         Assert.AreEqual(90, health.Current);
@@ -49,9 +48,8 @@ public class DamageSystemTests
             world.Create(new Damage(target.Reference(), 5)),
             world.Create(new Damage(target.Reference(), 30))
         };
-
-        foreach (var entity in entities)
-            system.Tick(entity, ref world.Get<Damage>(entity));
+        
+        system.Update();
 
         var health = world.Get<Health>(target);
         Assert.AreEqual(55, health.Current);
@@ -64,7 +62,7 @@ public class DamageSystemTests
     {
         var entity = world.Create(new Damage(target.Reference(), 130));
 
-        system.Tick(entity, ref world.Get<Damage>(entity));
+        system.Update();
 
         var health = world.Get<Health>(target);
         Assert.AreEqual(0, health.Current);
@@ -82,8 +80,7 @@ public class DamageSystemTests
             world.Create(new Damage(target.Reference(), 20))
         };
 
-        foreach (var entity in entities)
-            system.Tick(entity, ref world.Get<Damage>(entity));
+        system.Update();
 
         var health = world.Get<Health>(target);
         Assert.AreEqual(0, health.Current);

@@ -26,9 +26,9 @@ public class ProfileDisplayController
         async Task RequestNameChangeAsync(string profileId, string name, CancellationToken cancellationToken)
         {
             var profile = await profileGateway.GetProfile(profileId, cancellationToken);
-            
+
             if (profile != null)
-                await profileGateway.UpdateProfile(profile with {Name = name}, cancellationToken);
+                await profileGateway.UpdateProfile(profile with { Name = name }, cancellationToken);
         }
 
         // TODO: make proper cancellation token handling
