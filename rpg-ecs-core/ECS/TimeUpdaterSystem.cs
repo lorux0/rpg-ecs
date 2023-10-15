@@ -14,7 +14,15 @@ public partial class TimeUpdaterSystem : ISimpleSystem
     {
         this.world = world;
         this.dateProvider = dateProvider;
+    }
+
+    public void Initialize()
+    {
         lastUpdatedTimestamp = dateProvider.UtcNow;
+    }
+    
+    public void Dispose()
+    {
     }
 
     public void Update()
@@ -24,7 +32,7 @@ public partial class TimeUpdaterSystem : ISimpleSystem
 
     [Query]
     [All(typeof(Time))]
-    private void Tick(in Entity entity, ref Time time)
+    private void Tick(ref Time time)
     {
         var now = DateTime.UtcNow;
         var elapsed = time.Elapsed;

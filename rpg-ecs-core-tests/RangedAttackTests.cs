@@ -20,14 +20,16 @@ public class RangedAttackTests
     public void BeforeEachTest()
     {
         world = World.Create();
-        system = new RangedAttackSystem(world);
         attacker = world.Create(new Position(new Vector3(1, 4, 2)));
         target = world.Create(new Position(new Vector3(1, 3, 2)));
+        system = new RangedAttackSystem(world);
+        system.Initialize();
     }
 
     [TearDown]
     public void AfterEachTest()
     {
+        system.Dispose();
         World.Destroy(world);
     }
 

@@ -15,6 +15,14 @@ public partial class UpdateProfileToUISystem : ISimpleSystem
         this.profileBridge = profileBridge;
     }
 
+    public void Initialize()
+    {
+    }
+    
+    public void Dispose()
+    {
+    }
+
     public void Update()
     {
         BroadcastToUIQuery(world);

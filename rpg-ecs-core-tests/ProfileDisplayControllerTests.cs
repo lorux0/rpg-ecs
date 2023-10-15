@@ -24,12 +24,14 @@ public class ProfileDisplayControllerTests
         var profileBridge = new ECSProfileAntiCorruptionLayer(world);
         controller = new ProfileDisplayController(view, profileBridge);
         system = new UpdateProfileToUISystem(world, profileBridge);
+        system.Initialize();
     }
 
     [TearDown]
     public void AfterEachTest()
     {
         controller.Dispose();
+        system.Dispose();
         World.Destroy(world);
     }
 

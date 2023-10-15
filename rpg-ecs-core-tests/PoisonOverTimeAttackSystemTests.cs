@@ -7,9 +7,9 @@ using NUnit.Framework;
 
 namespace Lorux0r.Core.Tests;
 
-public class DamageOverTimeSystemTests
+public class PoisonOverTimeAttackSystemTests
 {
-    private DamageOverTimeSystem system = null!;
+    private PoisonOverTimeAttackSystem system = null!;
     private World world = null!;
     private Entity target;
 
@@ -17,7 +17,7 @@ public class DamageOverTimeSystemTests
     public void BeforeEachTest()
     {
         world = World.Create();
-        system = new DamageOverTimeSystem(world);
+        system = new PoisonOverTimeAttackSystem(world);
         target = world.Create(new Health(100, 100));
         system.Initialize();
     }
@@ -32,7 +32,7 @@ public class DamageOverTimeSystemTests
     [Test]
     public void HitOnceBeforeExpiring()
     {
-        var entity = world.Create(new DamageOverTimeAttack(target.Reference(), 10,
+        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), 10,
             TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0.3)));
 
         var time = new Time(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1.2), 1);
@@ -40,11 +40,11 @@ public class DamageOverTimeSystemTests
         system.Update(time);
         system.AfterUpdate(time);
 
-        var attack = world.Get<DamageOverTimeAttack>(entity);
+        var attack = world.Get<PoisonOverTimeAttack>(entity);
         Assert.AreEqual(TimeSpan.FromSeconds(8.8), attack.Remaining);
         Assert.AreEqual(TimeSpan.FromSeconds(0.5), attack.Elapsed);
         var damages = new List<Entity>();
-        world.GetEntities(in new QueryDescription().WithAll<Damage>(), damages);
+        world.GetEntities(in new QueryDescription().WithAll<PoisonDamage>(), damages);
         Assert.AreEqual(1, damages.Count);
         Assert.IsFalse(world.Has<DestroyEntitySchedule>(entity));
     }
@@ -52,7 +52,7 @@ public class DamageOverTimeSystemTests
     [Test]
     public void DontHitWhenIntervalIsNotElapsed()
     {
-        var entity = world.Create(new DamageOverTimeAttack(target.Reference(), 10,
+        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), 10,
             TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0.3)));
 
         var time = new Time(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0.6), 1);
@@ -60,11 +60,11 @@ public class DamageOverTimeSystemTests
         system.Update(time);
         system.AfterUpdate(time);
 
-        var attack = world.Get<DamageOverTimeAttack>(entity);
+        var attack = world.Get<PoisonOverTimeAttack>(entity);
         Assert.AreEqual(TimeSpan.FromSeconds(9.4), attack.Remaining);
         Assert.AreEqual(TimeSpan.FromSeconds(0.9), attack.Elapsed);
         var damages = new List<Entity>();
-        world.GetEntities(in new QueryDescription().WithAll<Damage>(), damages);
+        world.GetEntities(in new QueryDescription().WithAll<PoisonDamage>(), damages);
         CollectionAssert.IsEmpty(damages);
         Assert.IsFalse(world.Has<DestroyEntitySchedule>(entity));
     }
@@ -72,7 +72,7 @@ public class DamageOverTimeSystemTests
     [Test]
     public void HitManyTimesBeforeExpiring()
     {
-        var entity = world.Create(new DamageOverTimeAttack(target.Reference(), 10,
+        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), 10,
             TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(0)));
 
         var time = new Time(TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(10), 1);
@@ -80,11 +80,11 @@ public class DamageOverTimeSystemTests
         system.Update(time);
         system.AfterUpdate(time);
 
-        var attack = world.Get<DamageOverTimeAttack>(entity);
+        var attack = world.Get<PoisonOverTimeAttack>(entity);
         Assert.AreEqual(TimeSpan.FromSeconds(10), attack.Remaining);
         Assert.AreEqual(TimeSpan.FromSeconds(0), attack.Elapsed);
         var damages = new List<Entity>();
-        world.GetEntities(in new QueryDescription().WithAll<Damage>(), damages);
+        world.GetEntities(in new QueryDescription().WithAll<PoisonDamage>(), damages);
         Assert.AreEqual(2, damages.Count);
         Assert.IsFalse(world.Has<DestroyEntitySchedule>(entity));
     }
@@ -92,7 +92,7 @@ public class DamageOverTimeSystemTests
     [Test]
     public void HitAndExpire()
     {
-        var entity = world.Create(new DamageOverTimeAttack(target.Reference(), 10,
+        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), 10,
             TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(0.3)));
 
         var time = new Time(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), 1);
@@ -100,11 +100,11 @@ public class DamageOverTimeSystemTests
         system.Update(time);
         system.AfterUpdate(time);
 
-        var attack = world.Get<DamageOverTimeAttack>(entity);
+        var attack = world.Get<PoisonOverTimeAttack>(entity);
         Assert.AreEqual(TimeSpan.FromSeconds(0), attack.Remaining);
         Assert.AreEqual(TimeSpan.FromSeconds(0.3), attack.Elapsed);
         var damages = new List<Entity>();
-        world.GetEntities(in new QueryDescription().WithAll<Damage>(), damages);
+        world.GetEntities(in new QueryDescription().WithAll<PoisonDamage>(), damages);
         Assert.AreEqual(1, damages.Count);
         Assert.IsTrue(world.Has<DestroyEntitySchedule>(entity));
     }

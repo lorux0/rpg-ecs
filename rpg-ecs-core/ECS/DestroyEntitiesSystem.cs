@@ -12,6 +12,14 @@ public class DestroyEntitiesSystem : ISimpleSystem
         this.world = world;
     }
 
+    public void Initialize()
+    {
+    }
+    
+    public void Dispose()
+    {
+    }
+
     public void Update()
     {
         world.Destroy(in query);

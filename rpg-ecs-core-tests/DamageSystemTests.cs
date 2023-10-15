@@ -18,11 +18,13 @@ public class DamageSystemTests
         world = World.Create();
         system = new DamageSystem(world);
         target = world.Create(new Health(100, 100));
+        system.Initialize();
     }
 
     [TearDown]
     public void AfterEachTest()
     {
+        system.Dispose();
         World.Destroy(world);
     }
 

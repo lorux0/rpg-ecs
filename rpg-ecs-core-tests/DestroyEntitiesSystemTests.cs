@@ -16,11 +16,13 @@ public class DestroyEntitiesSystemTests
     {
         world = World.Create();
         system = new DestroyEntitiesSystem(world);
+        system.Initialize();
     }
 
     [TearDown]
     public void AfterEachTest()
     {
+        system.Dispose();
         World.Destroy(world);
     }
 

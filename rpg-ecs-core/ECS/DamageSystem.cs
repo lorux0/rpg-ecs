@@ -13,6 +13,14 @@ public partial class DamageSystem : ISimpleSystem
         this.world = world;
     }
 
+    public void Initialize()
+    {
+    }
+    
+    public void Dispose()
+    {
+    }
+
     public void Update()
     {
         ApplyQuery(world);

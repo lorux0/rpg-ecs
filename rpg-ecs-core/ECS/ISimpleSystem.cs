@@ -1,6 +1,7 @@
 namespace Lorux0r.RPG.Core.ECS;
 
-public interface ISimpleSystem
+public interface ISimpleSystem : IDisposable
 {
+    void Initialize();
     void Update();
 }
