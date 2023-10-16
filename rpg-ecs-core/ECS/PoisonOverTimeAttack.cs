@@ -2,7 +2,7 @@ using Arch.Core;
 
 namespace Lorux0r.RPG.Core.ECS;
 
-public struct PoisonOverTimeAttack
+public struct PoisonOverTimeAttack : IOverTimeAction
 {
     public EntityReference Target { get; }
     public float Damage { get; }
