@@ -5,14 +5,16 @@ namespace Lorux0r.RPG.Core.ECS;
 public struct PoisonOverTimeAttack : IOverTimeAction
 {
     public EntityReference Target { get; }
+    public EntityReference Attacker { get; }
     public float Damage { get; }
     public TimeSpan Interval { get; }
     public TimeSpan Remaining { get; set; }
     public TimeSpan Elapsed { get; set; }
     
-    public PoisonOverTimeAttack(EntityReference target, float damage, TimeSpan interval, TimeSpan remaining, TimeSpan elapsed)
+    public PoisonOverTimeAttack(EntityReference target, EntityReference attacker, float damage, TimeSpan interval, TimeSpan remaining, TimeSpan elapsed)
     {
         Target = target;
+        Attacker = attacker;
         Damage = damage;
         Interval = interval;
         Remaining = remaining;

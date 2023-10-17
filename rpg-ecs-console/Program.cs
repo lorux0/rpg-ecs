@@ -11,19 +11,23 @@ const int TICK_HZ = 1;
 
 var world = World.Create();
 world.Create(new Time(TimeSpan.Zero, TimeSpan.Zero, 1));
+// Characters
 var wizard = world.Create(new Health(50, 50),
     new ECSProfile(Guid.NewGuid().ToString(), "Wizard"),
     new Position(Vector3.Zero));
-world.Create(new Health(70, 70),
+var hunter = world.Create(new Health(70, 70),
     new ECSProfile(Guid.NewGuid().ToString(), "Hunter"),
-    new Position(new Vector3(1, 0, 0)));
+    new Position(new Vector3(7, 0, 0)));
 var warrior = world.Create(new Health(100, 100),
     new ECSProfile(Guid.NewGuid().ToString(), "Warrior"),
     new Position(new Vector3(2, 0, 0)));
+// Equipment
 world.Create(new Equipment(warrior.Reference(), true), new PoisonResistance(0.1f));
-world.Create(new DamageOverTimeAttack(wizard.Reference(), 5, 
+world.Create(new Equipment(hunter.Reference(), true), new DamageOffRangeAmplifier(1, 1.1f));
+// Attacks
+world.Create(new DamageOverTimeAttack(wizard.Reference(), hunter.Reference(), 5,
     TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.Zero));
-world.Create(new PoisonOverTimeAttack(warrior.Reference(), 10,
+world.Create(new PoisonOverTimeAttack(warrior.Reference(), hunter.Reference(), 10,
     TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.Zero));
 
 var timedSystems = new Group<Time>(
@@ -35,11 +39,13 @@ var ecsProfileGateway = new ECSProfileAntiCorruptionLayer(world);
 var simpleSystems = new ISimpleSystem[]
 {
     new TimeUpdaterSystem(world, new SystemDateProvider()),
+    new ApplyResistancesFromEquipmentSystem(world),
+    new ApplyDamageOffRangeFromEquipmentSystem(world),
     new RangedAttackSystem(world),
-    new UpdateProfileToUISystem(world, ecsProfileGateway),
+    new DamageOffRangeAmplifierSystem(world),
     new PoisonDamageSystem(world),
     new DamageSystem(world),
-    new ApplyResistancesFromEquipmentSystem(world),
+    new UpdateProfileToUISystem(world, ecsProfileGateway),
     new DestroyEntitiesSystem(world),
 };
 
@@ -60,9 +66,9 @@ while (await timer.WaitForNextTickAsync() && !cancellationToken.IsCancellationRe
     {
         foreach (var system in simpleSystems)
             system.Update();
-        
+
         var time = world.GetTime();
-        
+
         timedSystems.BeforeUpdate(time);
         timedSystems.Update(time);
         timedSystems.AfterUpdate(time);

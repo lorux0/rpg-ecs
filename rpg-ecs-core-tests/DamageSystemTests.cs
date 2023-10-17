@@ -11,6 +11,7 @@ public class DamageSystemTests
     private World world = null!;
     private DamageSystem system = null!;
     private Entity target;
+    private Entity attacker;
 
     [SetUp]
     public void BeforeEachTest()
@@ -18,6 +19,7 @@ public class DamageSystemTests
         world = World.Create();
         system = new DamageSystem(world);
         target = world.Create(new Health(100, 100));
+        attacker = world.Create(new Health(100, 100));
         system.Initialize();
     }
 
@@ -31,7 +33,7 @@ public class DamageSystemTests
     [Test]
     public void HitOnce()
     {
-        var entity = world.Create(new Damage(target.Reference(), 10));
+        var entity = world.Create(new Damage(target.Reference(), attacker.Reference(), 10));
 
         system.Update();
 
@@ -46,9 +48,9 @@ public class DamageSystemTests
     {
         var entities = new[]
         {
-            world.Create(new Damage(target.Reference(), 10)),
-            world.Create(new Damage(target.Reference(), 5)),
-            world.Create(new Damage(target.Reference(), 30))
+            world.Create(new Damage(target.Reference(), attacker.Reference(), 10)),
+            world.Create(new Damage(target.Reference(), attacker.Reference(), 5)),
+            world.Create(new Damage(target.Reference(), attacker.Reference(), 30))
         };
         
         system.Update();
@@ -62,7 +64,7 @@ public class DamageSystemTests
     [Test]
     public void Kill()
     {
-        var entity = world.Create(new Damage(target.Reference(), 130));
+        var entity = world.Create(new Damage(target.Reference(), attacker.Reference(), 130));
 
         system.Update();
 
@@ -77,9 +79,9 @@ public class DamageSystemTests
     {
         var entities = new[]
         {
-            world.Create(new Damage(target.Reference(), 30)),
-            world.Create(new Damage(target.Reference(), 50)),
-            world.Create(new Damage(target.Reference(), 20))
+            world.Create(new Damage(target.Reference(), attacker.Reference(), 30)),
+            world.Create(new Damage(target.Reference(), attacker.Reference(), 50)),
+            world.Create(new Damage(target.Reference(), attacker.Reference(), 20))
         };
 
         system.Update();

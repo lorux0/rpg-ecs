@@ -33,7 +33,7 @@ public class PoisonDamageSystemTests
     [Test]
     public void ApplyDamageWithoutResistance()
     {
-        var poison = world.Create(new PoisonDamage(world.Reference(wizard), 10));
+        var poison = world.Create(new PoisonDamage(world.Reference(wizard), world.Reference(warrior), 10));
 
         system.Update();
 
@@ -47,7 +47,7 @@ public class PoisonDamageSystemTests
     [Test]
     public void ApplyDamageWithResistance()
     {
-        var poison = world.Create(new PoisonDamage(world.Reference(warrior), 10));
+        var poison = world.Create(new PoisonDamage(world.Reference(warrior), world.Reference(wizard), 10));
 
         system.Update();
 

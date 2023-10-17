@@ -39,7 +39,7 @@ public partial class PoisonDamageSystem : ISimpleSystem
             finalDamage *= ratio;
         }
 
-        world.Create(new Damage(target, finalDamage));
+        world.Create(new Damage(target, damage.Attacker, finalDamage));
         
         entity.FlagToDestroy(world);
     }

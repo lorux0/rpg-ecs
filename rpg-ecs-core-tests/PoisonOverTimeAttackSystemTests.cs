@@ -12,6 +12,7 @@ public class PoisonOverTimeAttackSystemTests
     private PoisonOverTimeAttackSystem system = null!;
     private World world = null!;
     private Entity target;
+    private Entity attacker;
 
     [SetUp]
     public void BeforeEachTest()
@@ -19,6 +20,7 @@ public class PoisonOverTimeAttackSystemTests
         world = World.Create();
         system = new PoisonOverTimeAttackSystem(world);
         target = world.Create(new Health(100, 100));
+        attacker = world.Create(new Health(100, 100));
         system.Initialize();
     }
 
@@ -32,7 +34,7 @@ public class PoisonOverTimeAttackSystemTests
     [Test]
     public void HitOnceBeforeExpiring()
     {
-        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), 10,
+        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), attacker.Reference(), 10,
             TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0.3)));
 
         var time = new Time(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1.2), 1);
@@ -52,7 +54,7 @@ public class PoisonOverTimeAttackSystemTests
     [Test]
     public void DontHitWhenIntervalIsNotElapsed()
     {
-        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), 10,
+        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), attacker.Reference(), 10,
             TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0.3)));
 
         var time = new Time(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0.6), 1);
@@ -72,7 +74,7 @@ public class PoisonOverTimeAttackSystemTests
     [Test]
     public void HitManyTimesBeforeExpiring()
     {
-        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), 10,
+        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), attacker.Reference(), 10,
             TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(0)));
 
         var time = new Time(TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(10), 1);
@@ -92,7 +94,7 @@ public class PoisonOverTimeAttackSystemTests
     [Test]
     public void HitAndExpire()
     {
-        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), 10,
+        var entity = world.Create(new PoisonOverTimeAttack(target.Reference(), attacker.Reference(), 10,
             TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(0.3)));
 
         var time = new Time(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), 1);

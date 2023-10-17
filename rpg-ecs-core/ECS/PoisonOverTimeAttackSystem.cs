@@ -10,6 +10,6 @@ public class PoisonOverTimeAttackSystem : OverTimeActionSystem<PoisonOverTimeAtt
 
     protected override void Execute(in Time time, in Entity entity, PoisonOverTimeAttack action)
     {
-        World.Create(new PoisonDamage(action.Target, action.Damage));
+        World.Create(new PoisonDamage(action.Target, action.Attacker, action.Damage));
     }
 }

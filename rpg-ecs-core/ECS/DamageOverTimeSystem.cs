@@ -10,6 +10,6 @@ public class DamageOverTimeSystem : OverTimeActionSystem<DamageOverTimeAttack>
 
     protected override void Execute(in Time time, in Entity entity, DamageOverTimeAttack action)
     {
-        World.Create(new Damage(action.Target, action.Damage));
+        World.Create(new Damage(action.Target, action.Attacker, action.Damage));
     }
 }

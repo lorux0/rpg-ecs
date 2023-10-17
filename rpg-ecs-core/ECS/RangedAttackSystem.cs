@@ -38,7 +38,7 @@ public partial class RangedAttackSystem : ISimpleSystem
         var targetPosition = attack.Target.Entity.Get<Position>().Current;
 
         if ((targetPosition - attackerPosition).LengthSquared() <= attack.Range * attack.Range)
-            world.Add(entity, new Damage(attack.Target, attack.Damage));
+            world.Add(entity, new Damage(attack.Target, attack.Attacker, attack.Damage));
 
         entity.FlagToDestroy(world);
     }
