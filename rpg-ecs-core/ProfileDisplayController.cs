@@ -5,6 +5,8 @@ public class ProfileDisplayController
     private readonly IProfileDisplayView view;
     private readonly IProfileGateway profileGateway;
 
+    private CancellationTokenSource? changeNameCancellationToken;
+
     public ProfileDisplayController(IProfileDisplayView view,
         IProfileGateway profileGateway)
     {
@@ -19,20 +21,20 @@ public class ProfileDisplayController
     {
         view.ChangeNameRequested -= RequestNameChange;
         profileGateway.OnProfileUpdated -= ShowProfile;
+        changeNameCancellationToken?.Cancel();
+        changeNameCancellationToken?.Dispose();
     }
 
-    private void RequestNameChange(string profileId, string name)
+    private async void RequestNameChange(string profileId, string name)
     {
-        async Task RequestNameChangeAsync(string profileId, string name, CancellationToken cancellationToken)
-        {
-            var profile = await profileGateway.GetProfile(profileId, cancellationToken);
+        changeNameCancellationToken?.Cancel();
+        changeNameCancellationToken?.Dispose();
+        changeNameCancellationToken = new CancellationTokenSource();
+        
+        var profile = await profileGateway.GetProfile(profileId, changeNameCancellationToken.Token);
 
-            if (profile != null)
-                await profileGateway.UpdateProfile(profile with { Name = name }, cancellationToken);
-        }
-
-        // TODO: make proper cancellation token handling
-        RequestNameChangeAsync(profileId, name, default);
+        if (profile != null)
+            await profileGateway.UpdateProfile(profile with { Name = name }, changeNameCancellationToken.Token);
     }
 
     private void ShowProfile(Profile profile) =>
