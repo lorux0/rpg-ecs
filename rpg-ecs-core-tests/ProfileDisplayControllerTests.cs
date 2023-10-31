@@ -1,10 +1,10 @@
 using System;
-using System.Numerics;
 using Arch.Core;
 using Lorux0r.RPG.Core;
 using Lorux0r.RPG.Core.ECS;
 using NSubstitute;
 using NUnit.Framework;
+using UnityEngine;
 using ECSProfile = Lorux0r.RPG.Core.ECS.Profile;
 
 namespace Lorux0r.Core.Tests;

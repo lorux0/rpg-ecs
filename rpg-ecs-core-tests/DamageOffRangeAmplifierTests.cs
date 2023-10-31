@@ -1,7 +1,7 @@
-using System.Numerics;
 using Arch.Core;
 using Lorux0r.RPG.Core.ECS;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Lorux0r.Core.Tests;
 

@@ -1,11 +1,12 @@
-﻿using System.Numerics;
-using Arch.Core;
+﻿using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
 using Lorux0r.RPG.Console;
 using Lorux0r.RPG.Core;
 using Lorux0r.RPG.Core.ECS;
+using UnityEngine;
 using ECSProfile = Lorux0r.RPG.Core.ECS.Profile;
+using Time = Lorux0r.RPG.Core.ECS.Time;
 
 const int TICK_HZ = 1;
 
@@ -14,13 +15,20 @@ world.Create(new Time(TimeSpan.Zero, TimeSpan.Zero, 1));
 // Characters
 var wizard = world.Create(new Health(50, 50),
     new ECSProfile(Guid.NewGuid().ToString(), "Wizard"),
-    new Position(Vector3.Zero));
+    new Position(Vector3.zero),
+    new Movable(1),
+    (ICharacterPhysics) new DummyCharacterPhysics(),
+    new CharacterAxisInput());
 var hunter = world.Create(new Health(70, 70),
     new ECSProfile(Guid.NewGuid().ToString(), "Hunter"),
-    new Position(new Vector3(7, 0, 0)));
+    new Position(new Vector3(7, 0, 0)),
+    new Movable(2),
+    (ICharacterPhysics) new DummyCharacterPhysics());
 var warrior = world.Create(new Health(100, 100),
     new ECSProfile(Guid.NewGuid().ToString(), "Warrior"),
-    new Position(new Vector3(2, 0, 0)));
+    new Position(new Vector3(2, 0, 0)),
+    new Movable(1.5f),
+    (ICharacterPhysics) new DummyCharacterPhysics());
 // Equipment
 world.Create(new Equipment(warrior.Reference(), true), new PoisonResistance(0.1f));
 world.Create(new Equipment(hunter.Reference(), true), new DamageOffRangeAmplifier(1, 1.1f));
@@ -32,13 +40,15 @@ world.Create(new PoisonOverTimeAttack(warrior.Reference(), hunter.Reference(), 1
 
 var timedSystems = new Group<Time>(
     new DamageOverTimeSystem(world),
-    new PoisonOverTimeAttackSystem(world)
+    new PoisonOverTimeAttackSystem(world),
+    new ApplyCharacterMovementInputToPhysicsSystem(world)
 );
 
 var ecsProfileGateway = new ECSProfileAntiCorruptionLayer(world);
 var simpleSystems = new ISimpleSystem[]
 {
     new TimeUpdaterSystem(world, new SystemDateProvider()),
+    new ApplyMovementInputFromInputSystem(world, new DummyCharacterInputProvider()),
     new ApplyResistancesFromEquipmentSystem(world),
     new ApplyDamageOffRangeFromEquipmentSystem(world),
     new RangedAttackSystem(world),

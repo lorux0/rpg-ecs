@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using Arch.Core;
 using Arch.Core.Extensions;
-using Lorux0r.RPG.Core;
 using Lorux0r.RPG.Core.ECS;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Lorux0r.Core.Tests;
 

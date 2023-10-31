@@ -17,6 +17,7 @@
         <PackageReference Include="Arch.Relationships" Version="1.0.0" />
         <PackageReference Include="Arch.System" Version="1.0.2" />
         <PackageReference Include="Arch.System.SourceGenerator" Version="1.1.1" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <PackageReference Include="Unity3D.UnityEngine" Version="2018.3.5.1" />
     </ItemGroup>
 
 </Project>

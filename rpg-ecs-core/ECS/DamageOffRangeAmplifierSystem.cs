@@ -40,7 +40,7 @@ public partial class DamageOffRangeAmplifierSystem : ISimpleSystem
         var targetPosition = world.Get<Position>(target);
         var amplifier = world.Get<DamageOffRangeAmplifier>(attacker);
         
-        if ((attackerPosition.Current - targetPosition.Current).LengthSquared() < amplifier.Distance * amplifier.Distance) return;
+        if ((attackerPosition.Current - targetPosition.Current).sqrMagnitude < amplifier.Distance * amplifier.Distance) return;
 
         world.Create(new Damage(damage.Target, damage.Attacker, damage.Value * amplifier.AdditionMultiplier));
     }
