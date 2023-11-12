@@ -2,6 +2,7 @@ using System.Linq;
 using Arch.Core;
 using Arch.Core.Extensions;
 using Lorux0r.RPG.Core.ECS;
+using Lorux0r.RPG.Core.ECS.Combat;
 using NUnit.Framework;
 
 namespace Lorux0r.Core.Tests;

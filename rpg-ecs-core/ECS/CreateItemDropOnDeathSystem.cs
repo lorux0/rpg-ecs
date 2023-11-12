@@ -1,5 +1,7 @@
 using Arch.Core;
 using Arch.System;
+using Lorux0r.RPG.Core.ECS.Combat;
+using Lorux0r.RPG.Core.ECS.Itemization;
 
 namespace Lorux0r.RPG.Core.ECS;
 

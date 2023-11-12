@@ -1,4 +1,5 @@
 using Arch.Core;
+using Lorux0r.RPG.Core.ECS.Combat;
 using UIProfile = Lorux0r.RPG.Core.Profile;
 
 namespace Lorux0r.RPG.Core.ECS;

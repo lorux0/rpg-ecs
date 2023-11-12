@@ -1,5 +1,7 @@
 using Arch.Core;
 using Lorux0r.RPG.Core.ECS;
+using Lorux0r.RPG.Core.ECS.Combat;
+using Lorux0r.RPG.Core.ECS.Combat.Poison;
 using NUnit.Framework;
 
 namespace Lorux0r.Core.Tests;

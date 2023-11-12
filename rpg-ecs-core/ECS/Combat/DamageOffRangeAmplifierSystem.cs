@@ -1,7 +1,7 @@
 using Arch.Core;
 using Arch.System;
 
-namespace Lorux0r.RPG.Core.ECS;
+namespace Lorux0r.RPG.Core.ECS.Combat;
 
 public partial class DamageOffRangeAmplifierSystem : ISimpleSystem
 {

@@ -1,4 +1,4 @@
-namespace Lorux0r.RPG.Core.ECS;
+namespace Lorux0r.RPG.Core.ECS.Combat.Poison;
 
 public struct PoisonResistance
 {

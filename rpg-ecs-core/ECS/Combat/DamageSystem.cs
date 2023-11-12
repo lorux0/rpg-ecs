@@ -2,7 +2,7 @@ using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
 
-namespace Lorux0r.RPG.Core.ECS;
+namespace Lorux0r.RPG.Core.ECS.Combat;
 
 public partial class DamageSystem : ISimpleSystem
 {

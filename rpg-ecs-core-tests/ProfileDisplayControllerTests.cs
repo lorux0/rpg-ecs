@@ -2,6 +2,7 @@ using System;
 using Arch.Core;
 using Lorux0r.RPG.Core;
 using Lorux0r.RPG.Core.ECS;
+using Lorux0r.RPG.Core.ECS.Combat;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;

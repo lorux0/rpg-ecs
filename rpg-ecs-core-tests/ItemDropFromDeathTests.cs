@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using Arch.Core;
 using Arch.Core.Extensions;
 using Lorux0r.RPG.Core.ECS;
+using Lorux0r.RPG.Core.ECS.Combat;
+using Lorux0r.RPG.Core.ECS.Itemization;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;

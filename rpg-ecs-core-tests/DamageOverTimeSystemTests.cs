@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Arch.Core;
 using Arch.Core.Extensions;
 using Lorux0r.RPG.Core.ECS;
+using Lorux0r.RPG.Core.ECS.Combat;
+using Lorux0r.RPG.Core.ECS.Combat.DOT;
 using NUnit.Framework;
 
 namespace Lorux0r.Core.Tests;

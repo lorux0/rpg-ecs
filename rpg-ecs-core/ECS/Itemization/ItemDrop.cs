@@ -1,6 +1,6 @@
 using Arch.Core;
 
-namespace Lorux0r.RPG.Core.ECS;
+namespace Lorux0r.RPG.Core.ECS.Itemization;
 
 public struct ItemDrop
 {

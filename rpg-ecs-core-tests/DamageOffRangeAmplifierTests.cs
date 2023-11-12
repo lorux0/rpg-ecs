@@ -1,5 +1,6 @@
 using Arch.Core;
 using Lorux0r.RPG.Core.ECS;
+using Lorux0r.RPG.Core.ECS.Combat;
 using NUnit.Framework;
 using UnityEngine;
 

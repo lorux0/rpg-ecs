@@ -1,7 +1,8 @@
 using Arch.Core;
 using Arch.System;
+using Lorux0r.RPG.Core.ECS.Combat.Poison;
 
-namespace Lorux0r.RPG.Core.ECS;
+namespace Lorux0r.RPG.Core.ECS.Combat;
 
 public partial class ApplyResistancesFromEquipmentSystem : ISimpleSystem
 {
