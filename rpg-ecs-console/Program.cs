@@ -6,6 +6,7 @@ using Lorux0r.RPG.Core;
 using Lorux0r.RPG.Core.ECS;
 using UnityEngine;
 using ECSProfile = Lorux0r.RPG.Core.ECS.Profile;
+using Random = System.Random;
 using Time = Lorux0r.RPG.Core.ECS.Time;
 
 const int TICK_HZ = 1;
@@ -23,7 +24,8 @@ var hunter = world.Create(new Health(70, 70),
     new ECSProfile(Guid.NewGuid().ToString(), "Hunter"),
     new Position(new Vector3(7, 0, 0)),
     new Movable(2),
-    (ICharacterPhysics) new DummyCharacterPhysics());
+    (ICharacterPhysics) new DummyCharacterPhysics(),
+    new ItemDropTags(new[] {"rune_t1", "rune_t2"}, 1));
 var warrior = world.Create(new Health(100, 100),
     new ECSProfile(Guid.NewGuid().ToString(), "Warrior"),
     new Position(new Vector3(2, 0, 0)),
@@ -55,6 +57,7 @@ var simpleSystems = new ISimpleSystem[]
     new DamageOffRangeAmplifierSystem(world),
     new PoisonDamageSystem(world),
     new DamageSystem(world),
+    new CreateItemDropOnDeathSystem(world, Random.Shared, new HardcodedItemDropTableProvider()),
     new UpdateProfileToUISystem(world, ecsProfileGateway),
     new DestroyEntitiesSystem(world),
 };

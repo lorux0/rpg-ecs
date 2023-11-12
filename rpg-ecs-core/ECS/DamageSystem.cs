@@ -32,14 +32,10 @@ public partial class DamageSystem : ISimpleSystem
     private void Apply(in Entity entity, ref Damage damage)
     {
         var targetEntity = damage.Target.Entity;
-        // TODO: is there any better way of connecting components and entities?
-        var health = targetEntity.Get<Health>();
+        ref var health = ref targetEntity.Get<Health>();
 
         if (!health.IsDead)
-        {
-            var newHealth = Math.Max(0, health.Current - damage.Value);
-            world.Set(targetEntity, new Health(newHealth, health.Max));
-        }
+            health.Current = Math.Max(0, health.Current - damage.Value);
 
         world.Add<DestroyEntitySchedule>(entity);
     }
