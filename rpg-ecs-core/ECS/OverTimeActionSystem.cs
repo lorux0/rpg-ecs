@@ -35,8 +35,10 @@ public abstract class OverTimeActionSystem<T> : BaseSystem<World, Time> where T 
 
     protected virtual void Tick(in Time time, in Entity entity, ref T action)
     {
-        action.Elapsed = action.Elapsed.Add(time.Delta);
-        action.Remaining = action.Remaining.Subtract(time.Delta);
+        var delta = time.Delta > action.Remaining ? action.Remaining : time.Delta;
+        
+        action.Elapsed = action.Elapsed.Add(delta);
+        action.Remaining = action.Remaining.Subtract(delta);
 
         while (action.Elapsed >= action.Interval)
         {

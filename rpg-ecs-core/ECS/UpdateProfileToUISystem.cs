@@ -32,7 +32,7 @@ public partial class UpdateProfileToUISystem : ISimpleSystem
 
     [Query]
     [All(typeof(Profile), typeof(Health))]
-    private void BroadcastToUI(in Entity entity, ref Profile profile, ref Health health, ref Position position)
+    private void BroadcastToUI(ref Profile profile, ref Health health, ref Position position)
     {
         // TODO: how we can check that components (profile & health) have just changed so we can avoid broadcasting on every query?
         // broadcast update event to ui
