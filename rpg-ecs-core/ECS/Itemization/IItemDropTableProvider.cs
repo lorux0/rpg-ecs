@@ -1,6 +1,4 @@
-using Lorux0r.RPG.Core.ECS.Itemization;
-
-namespace Lorux0r.RPG.Core.ECS;
+namespace Lorux0r.RPG.Core.ECS.Itemization;
 
 public interface IItemDropTableProvider
 {

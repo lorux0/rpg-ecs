@@ -45,6 +45,7 @@ world.Create(new PoisonOverTimeAttack(warrior.Reference(), hunter.Reference(), 1
     TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.Zero));
 
 var timedSystems = new Group<Time>(
+    new PoisonCloudAreaSystem(world),
     new DamageOverTimeSystem(world),
     new PoisonOverTimeAttackSystem(world),
     new ApplyCharacterMovementInputToPhysicsSystem(world)
