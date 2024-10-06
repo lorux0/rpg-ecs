@@ -14,7 +14,7 @@ namespace Lorux0r.Core.Tests;
 public class ItemDropFromDeathTests
 {
     private const string GUARANTEED_DROP_TABLE = "guaranteed";
-    private const string NOTHING_DROP_TABLE = "guaranteed";
+    private const string NOTHING_DROP_TABLE = "nothing";
     private const string ITEM_ID_RUNE_EL = "rune_el";
 
     private CreateItemDropOnDeathSystem system = null!;
@@ -28,11 +28,11 @@ public class ItemDropFromDeathTests
         itemDropTableProvider = Substitute.For<IItemDropTableProvider>();
         itemDropTableProvider.GetByTag(GUARANTEED_DROP_TABLE).Returns(new[]
         {
-            new ItemDropChance(ITEM_ID_RUNE_EL, 1)
+            new ItemDropRatio(ITEM_ID_RUNE_EL, 1)
         });
         itemDropTableProvider.GetByTag(NOTHING_DROP_TABLE).Returns(new[]
         {
-            new ItemDropChance(ITEM_ID_RUNE_EL, 0)
+            new ItemDropRatio(ITEM_ID_RUNE_EL, 0)
         });
         system = new CreateItemDropOnDeathSystem(world, new Random(98), itemDropTableProvider);
         system.Initialize();
@@ -47,7 +47,7 @@ public class ItemDropFromDeathTests
     [Test]
     public void DropOneItem()
     {
-        var enemyEntity = world.Create(new Health(0, 100),
+        var enemyEntity = world.Create(new Corpse(),
             new ItemDropTags(new[] {GUARANTEED_DROP_TABLE}, 1),
             new Position(new Vector3(5, 3, 2)));
 
@@ -60,14 +60,14 @@ public class ItemDropFromDeathTests
         var position = world.Get<Position>(dropEntity);
         var collectable = world.Get<Collectable>(dropEntity);
         Assert.AreEqual(1, entities.Count);
-        Assert.AreEqual(ITEM_ID_RUNE_EL, drop.ItemId);
+        Assert.AreEqual(ITEM_ID_RUNE_EL, (string) drop.ItemId);
         Assert.AreEqual(enemyEntity, drop.DroppedBy.Entity);
         Assert.AreEqual(new Vector3(5, 3, 2), position.Current);
         Assert.AreEqual(false, collectable.Collected);
         Assert.IsNull(collectable.CollectedBy);
 
         entities = new List<Entity>();
-        world.GetEntities(in new QueryDescription().WithAll<ItemDropProcessed>(), entities);
+        world.GetEntities(in new QueryDescription().WithAll<ItemDropResult>(), entities);
         Assert.AreEqual(enemyEntity, entities[0]);
         Assert.AreEqual(1, entities.Count);
     }
@@ -75,7 +75,8 @@ public class ItemDropFromDeathTests
     [Test]
     public void DropMultipleItems()
     {
-        var enemyEntity = world.Create(new Health(0, 100),
+        var enemyEntity = world.Create(
+            new Corpse(),
             new ItemDropTags(new[] {GUARANTEED_DROP_TABLE}, 2),
             new Position(new Vector3(5, 3, 2)));
 
@@ -83,7 +84,7 @@ public class ItemDropFromDeathTests
 
         var entities = new List<Entity>();
         world.GetEntities(in new QueryDescription().WithAll<ItemDrop, Position, Collectable>(), entities);
-        
+
         Assert.AreEqual(2, entities.Count);
 
         foreach (var dropEntity in entities)
@@ -91,8 +92,8 @@ public class ItemDropFromDeathTests
             var drop = world.Get<ItemDrop>(dropEntity);
             var position = world.Get<Position>(dropEntity);
             var collectable = world.Get<Collectable>(dropEntity);
-            
-            Assert.AreEqual(ITEM_ID_RUNE_EL, drop.ItemId);
+
+            Assert.AreEqual(ITEM_ID_RUNE_EL, (string) drop.ItemId);
             Assert.AreEqual(enemyEntity, drop.DroppedBy.Entity);
             Assert.AreEqual(new Vector3(5, 3, 2), position.Current);
             Assert.AreEqual(false, collectable.Collected);
@@ -100,7 +101,7 @@ public class ItemDropFromDeathTests
         }
 
         entities = new List<Entity>();
-        world.GetEntities(in new QueryDescription().WithAll<ItemDropProcessed>(), entities);
+        world.GetEntities(in new QueryDescription().WithAll<ItemDropResult>(), entities);
         Assert.AreEqual(enemyEntity, entities[0]);
         Assert.AreEqual(1, entities.Count);
     }
@@ -111,7 +112,7 @@ public class ItemDropFromDeathTests
         world.Create(new Health(0, 100),
             new ItemDropTags(new[] {GUARANTEED_DROP_TABLE}, 1),
             new Position(new Vector3(5, 3, 2)),
-            new ItemDropProcessed());
+            new ItemDropResult());
 
         system.Update();
 
@@ -138,7 +139,7 @@ public class ItemDropFromDeathTests
             new Position(new Vector3(5, 3, 2)));
 
         system.Update();
-        
+
         ThenNoDropsHasBeenGenerated();
     }
 

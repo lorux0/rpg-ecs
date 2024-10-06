@@ -17,6 +17,8 @@ public struct GetProfileEntityByIdQuery : IForEachWithEntity<Profile>
     {
         this.id = id;
         this.world = world;
+        Result = EntityReference.Null;
+        Success = false;
     }
         
     public void Update(in Entity entity, ref Profile profile)

@@ -33,39 +33,40 @@ public partial class CreateItemDropOnDeathSystem : ISimpleSystem
     }
 
     [Query]
-    [All(typeof(Health), typeof(ItemDropTags), typeof(Position))]
-    [None(typeof(ItemDropProcessed))]
-    private void Execute(in Entity entity, ref Health health, ref ItemDropTags dropTags, ref Position position)
+    [All(typeof(Corpse))]
+    [None(typeof(ItemDropResult))]
+    private void Execute(in Entity entity, ref ItemDropTags dropTags, ref Position position)
     {
-        if (!health.IsDead) return;
         var tags = dropTags.Tags;
+        var drops = new List<ItemId>(dropTags.Iterations);
         
         for (var i = 0; i < dropTags.Iterations; i++)
         {
             var dropItemId = SolveDrop(tags);
-            if (string.IsNullOrEmpty(dropItemId)) continue;
-            world.Create(new ItemDrop(world.Reference(entity), dropItemId),
+            if (!dropItemId.HasValue) continue;
+            world.Create(new ItemDrop(world.Reference(entity), dropItemId.Value),
                 new Position(position.Current),
                 new Collectable(null));
+            drops.Add(dropItemId.Value);
         }
         
-        world.Add<ItemDropProcessed>(entity);
+        world.Add(entity, new ItemDropResult(drops));
     }
 
-    private string? SolveDrop(IEnumerable<string> tags)
+    private ItemId? SolveDrop(IEnumerable<string> tags)
     {
         foreach (var tag in tags)
         {
             var dropItemId = SolveDrop(tag);
-
-            if (!string.IsNullOrEmpty(dropItemId))
+            
+            if (dropItemId.HasValue)
                 return dropItemId;
         }
 
         return null;
     }
 
-    private string? SolveDrop(string tag)
+    private ItemId? SolveDrop(string tag)
     {
         var drops = itemDropTableProvider.GetByTag(tag);
         var random = randomGenerator.NextDouble();
@@ -73,7 +74,7 @@ public partial class CreateItemDropOnDeathSystem : ISimpleSystem
 
         foreach (var drop in drops)
         {
-            weight += drop.Weight;
+            weight += drop.Ratio;
 
             if (random <= weight)
                 return drop.ItemId;

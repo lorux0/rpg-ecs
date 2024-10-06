@@ -1,12 +1,9 @@
 ﻿using Arch.Core;
-using Arch.Core.Extensions;
 using Arch.System;
 using Lorux0r.RPG.Console;
 using Lorux0r.RPG.Core;
 using Lorux0r.RPG.Core.ECS;
 using Lorux0r.RPG.Core.ECS.Combat;
-using Lorux0r.RPG.Core.ECS.Combat.DOT;
-using Lorux0r.RPG.Core.ECS.Combat.Poison;
 using Lorux0r.RPG.Core.ECS.Itemization;
 using UnityEngine;
 using ECSProfile = Lorux0r.RPG.Core.ECS.Profile;
@@ -35,19 +32,8 @@ var warrior = world.Create(new Health(100, 100),
     new Position(new Vector3(2, 0, 0)),
     new Movable(1.5f),
     (ICharacterPhysics) new DummyCharacterPhysics());
-// Equipment
-world.Create(new Equipment(warrior.Reference(), true), new PoisonResistance(0.1f));
-world.Create(new Equipment(hunter.Reference(), true), new DamageOffRangeAmplifier(1, 1.1f));
-// Attacks
-world.Create(new DamageOverTimeAttack(wizard.Reference(), hunter.Reference(), 5,
-    TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.Zero));
-world.Create(new PoisonOverTimeAttack(warrior.Reference(), hunter.Reference(), 10,
-    TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.Zero));
 
 var timedSystems = new Group<Time>(
-    new PoisonCloudAreaSystem(world),
-    new DamageOverTimeSystem(world),
-    new PoisonOverTimeAttackSystem(world),
     new ApplyCharacterMovementInputToPhysicsSystem(world)
 );
 
@@ -56,12 +42,8 @@ var simpleSystems = new ISimpleSystem[]
 {
     new TimeUpdaterSystem(world, new SystemDateProvider()),
     new ApplyMovementInputFromInputSystem(world, new DummyCharacterInputProvider()),
-    new ApplyResistancesFromEquipmentSystem(world),
-    new ApplyDamageOffRangeFromEquipmentSystem(world),
     new RangedAttackSystem(world),
-    new DamageOffRangeAmplifierSystem(world),
-    new PoisonDamageSystem(world),
-    new DamageSystem(world),
+    new PhysicalDamageSystem(world),
     new CreateItemDropOnDeathSystem(world, Random.Shared, new HardcodedItemDropTableProvider()),
     new UpdateProfileToUISystem(world, ecsProfileGateway),
     new DestroyEntitiesSystem(world),

@@ -5,9 +5,9 @@ namespace Lorux0r.RPG.Core.ECS.Itemization;
 public struct ItemDrop
 {
     public EntityReference DroppedBy { get; }
-    public string ItemId { get; }
+    public ItemId ItemId { get; }
     
-    public ItemDrop(EntityReference droppedBy, string itemId)
+    public ItemDrop(EntityReference droppedBy, ItemId itemId)
     {
         DroppedBy = droppedBy;
         ItemId = itemId;

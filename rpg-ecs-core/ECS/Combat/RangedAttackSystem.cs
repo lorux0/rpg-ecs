@@ -27,19 +27,22 @@ public partial class RangedAttackSystem : ISimpleSystem
     }
 
     [Query]
-    [Any(typeof(RangedAttack))]
-    [None(typeof(Damage))]
     [None(typeof(DestroyEntitySchedule))]
-    private void Apply(in Entity entity, ref RangedAttack attack)
+    private void Apply(in Entity entity, ref RangedPhysicalAttack attack)
     {
         var attackerEntity = attack.Attacker.Entity;
-        // TODO: is there any better way of connecting components and entities?
-        var attackerPosition = attackerEntity.Get<Position>().Current;
-        var targetPosition = attack.Target.Entity.Get<Position>().Current;
+        var targetEntity = attack.Target.Entity;
+        var attackerPosition = world.Get<Position>(attackerEntity).Current;
+        var targetPosition = world.Get<Position>(targetEntity).Current;
 
         if ((targetPosition - attackerPosition).sqrMagnitude <= attack.Range * attack.Range)
-            world.Add(entity, new Damage(attack.Target, attack.Attacker, attack.Damage));
-
+        {
+            ref var accumulatedPhysicalDamage = ref world.TryGetRef<AccumulatedPhysicalDamage>(targetEntity, out var exists);
+            
+            if (exists)
+                accumulatedPhysicalDamage.All.Add(new PhysicalDamage(attack.Damage));
+        }
+        
         entity.FlagToDestroy(world);
     }
 }
